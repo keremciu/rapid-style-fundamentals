@@ -1,0 +1,8 @@
+title: Style Dictionary Example
+author:
+  name: GitHub User
+  email: waytoocool@domain.com
+description: > # this means to ignore newlines until "show_excerpts:"
+  This just an example site to show how the integration works.
+
+theme: minima
