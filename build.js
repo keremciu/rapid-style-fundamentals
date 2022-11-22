@@ -5,26 +5,27 @@ console.log('\n==============================================');
 
 
 // REGISTER THE CUSTOM TRANFORMS
-StyleDictionaryPackage.registerTransform({
-  name: 'shadow/css',
-  type: 'value',
-  // necessary in case the color is an alias reference, or the shadows themselves are aliased
-  transitive: true,
-  matcher: (token) => token.type === 'boxShadow',
+/**
+ * Based on: https://github.com/six7/figma-tokens/issues/379#issuecomment-1116953915
+ */
+ StyleDictionary.registerTransform({
+  name: "shadow/css",
+  type: "value",
+  transitive: true, // Necessary when the color is an alias reference, or the shadows themselves are aliased
+  matcher: (token) => token.type === "boxShadow",
   transformer: (token) => {
-    // allow both single and multi shadow tokens
-    const shadow = Array.isArray(token.value) ? token.value : [token.value];
+    // Allow both single and multi shadow tokens:
+    const shadows = Array.isArray(token.value) ? token.value : [token.value];
 
-    const value = shadow.map((s) => {
-      const { x, y, blur, color, type } = s;
-      // support inset shadows as well
-      return `${type === 'innerShadow' ? 'inset ' : ''}${x}px ${y}px ${blur}px ${color}`;
+    const transformedShadows = shadows.map((shadow) => {
+      const { x, y, blur, spread, color, type } = shadow;
+      const inset = type === "innerShadow" ? "inset " : "";
+      return `${inset}${x}px ${y}px ${blur}px ${spread}px ${color}`;
     });
 
-    return value.join(', ');
+    return transformedShadows.join(", ");
   },
 });
-
 
 // APPLY THE CONFIGURATION
 // IMPORTANT: the registration of custom transforms
